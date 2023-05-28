@@ -12,7 +12,9 @@ export default function Game() {
 
     function tick(index: number) {
         const {cells, moves} = game.attemptToMove(index);
-        setGame(game.copy(cells, moves));
+        if (game.movesCounter < moves) {
+            setGame(game.copy(cells, moves));
+        }
     }
 
     return (

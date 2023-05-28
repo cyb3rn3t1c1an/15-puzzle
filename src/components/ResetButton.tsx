@@ -11,7 +11,7 @@ export default function ResetButton({handler, isSolved}: Props) {
 
     const style: CSSProperties = {
         width: '19vw',
-        height: '2vw',
+        height: '3vw',
         background: '#335533',
         border: 'none',
         verticalAlign: 'center',

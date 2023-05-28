@@ -3,13 +3,19 @@ import CellModel, {Statuses} from "./CellModel.ts";
 export default class GameModel {
     private readonly width = 4
     private readonly gridSize = Math.pow(this.width, 2);
-    board: CellModel[] = [];
-    movesCounter = 0;
+    readonly board: CellModel[] = [];
+    readonly movesCounter: number;
 
-    constructor(cells: CellModel[] = [], movesCounter = 0, updated = false) {
+    /**
+     * Generates a new random board if no arguments are passed,
+     * otherwise just assigns passed cells and movesCounter
+     * @param cells
+     * @param movesCounter
+     */
+    constructor(cells: CellModel[] = [], movesCounter = 0) {
         this.board = cells;
         this.movesCounter = movesCounter;
-        if (!updated) {
+        if (cells.length === 0) {
             for (let i = 0; i < this.gridSize; i++) {
                 this.board[i] = new CellModel(i + 1, Statuses.FILLED);
 
@@ -21,7 +27,7 @@ export default class GameModel {
     }
 
     copy(cells: CellModel[], movesCounter: number) {
-        return new GameModel(cells, movesCounter, true);
+        return new GameModel(cells, movesCounter);
     }
 
     isSolved() {
@@ -33,15 +39,14 @@ export default class GameModel {
     attemptToMove(index: number) {
         const neighbors = this.findNeighbors(index);
         if (neighbors.left != null && this.isEmptyCell(neighbors.left)) {
-            this.move(index, neighbors.left);
+            return {cells: this.board, moves: this.move(index, neighbors.left)};
         } else if (neighbors.top != null && this.isEmptyCell(neighbors.top)) {
-            this.move(index, neighbors.top);
+            return {cells: this.board, moves: this.move(index, neighbors.top)};
         } else if (neighbors.right != null && this.isEmptyCell(neighbors.right)) {
-            this.move(index, neighbors.right);
+            return {cells: this.board, moves: this.move(index, neighbors.right)};
         } else if (neighbors.bottom != null && this.isEmptyCell(neighbors.bottom)) {
-            this.move(index, neighbors.bottom);
+            return {cells: this.board, moves: this.move(index, neighbors.bottom)};
         }
-
         return {cells: this.board, moves: this.movesCounter};
     }
 
@@ -49,9 +54,10 @@ export default class GameModel {
         return this.board[index].status == Statuses.EMPTY
     }
 
-    private move(from: number, to: number) {
+    private move(from: number, to: number): number {
         [this.board[from], this.board[to]] = [this.board[to], this.board[from]];
-        this.movesCounter++;
+
+        return this.movesCounter + 1;
     }
 
     private isSolvable() {
