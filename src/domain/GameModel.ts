@@ -38,20 +38,17 @@ export default class GameModel {
 
     attemptToMove(index: number) {
         const neighbors = this.findNeighbors(index);
-        if (neighbors.left != null && this.isEmptyCell(neighbors.left)) {
-            return {cells: this.board, moves: this.move(index, neighbors.left)};
-        } else if (neighbors.top != null && this.isEmptyCell(neighbors.top)) {
-            return {cells: this.board, moves: this.move(index, neighbors.top)};
-        } else if (neighbors.right != null && this.isEmptyCell(neighbors.right)) {
-            return {cells: this.board, moves: this.move(index, neighbors.right)};
-        } else if (neighbors.bottom != null && this.isEmptyCell(neighbors.bottom)) {
-            return {cells: this.board, moves: this.move(index, neighbors.bottom)};
+        const emptyCell = neighbors.find(index => this.isEmptyCell(index));
+
+        if (emptyCell !== undefined) {
+            return {cells: this.board, moves: this.move(index, emptyCell)};
         }
+
         return {cells: this.board, moves: this.movesCounter};
     }
 
     private isEmptyCell(index: number) {
-        return this.board[index].status == Statuses.EMPTY
+        return index == -1 ? false : this.board[index].status == Statuses.EMPTY;
     }
 
     private move(from: number, to: number): number {
@@ -88,12 +85,12 @@ export default class GameModel {
     }
 
     private findNeighbors(index: number) {
-        const top = index < this.width ? null : index - this.width;
-        const bottom = index + this.width >= this.gridSize ? null : index + this.width;
-        const left = index % this.width === 0 ? null : index - 1;
-        const right = (index + 1) % this.width === 0 ? null : index + 1;
+        const top = index < this.width ? -1 : index - this.width;
+        const bottom = index + this.width >= this.gridSize ? -1 : index + this.width;
+        const left = index % this.width === 0 ? -1 : index - 1;
+        const right = (index + 1) % this.width === 0 ? -1 : index + 1;
 
-        return {left, top, right, bottom};
+        return [left, top, right, bottom];
     }
 
 }
