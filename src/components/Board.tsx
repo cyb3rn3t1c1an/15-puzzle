@@ -1,14 +1,14 @@
 import {CSSProperties} from "react";
 import Cell from "./Cell.tsx";
-import CellModel, {Statuses} from "../domain/CellModel.ts";
+import {Statuses} from "../domain/CellModel.ts";
+import {useRecoilState, useRecoilValue} from "recoil";
 
-interface Props {
-    board: CellModel[];
-    tick: (index: number) => void
-    isSolved: boolean
-}
+import {gameState, isSolvedState} from "../recoil/State.ts";
 
-export default function Board({tick, board, isSolved}: Props) {
+export default function Board() {
+
+    const [game, setGame] = useRecoilState(gameState);
+    const isSolved = useRecoilValue(isSolvedState);
 
     const style: CSSProperties = {
         width: 'calc(6.4vw * 4)',
@@ -19,12 +19,15 @@ export default function Board({tick, board, isSolved}: Props) {
         pointerEvents: isSolved ? 'none' : 'auto'
     }
 
-    function handleClick(index: number) {
-        tick(index);
+    function tick(index: number) {
+        const {board, moves} = game.attemptToMove(index);
+        if (game.movesCounter < moves) {
+            setGame(game.copy(board, moves));
+        }
     }
 
-    const cells = board.map((cell, index) =>
-        <Cell key={index} value={cell.value} index={index} handleClick={() => handleClick(index)}
+    const cells = game.board.map((cell, index) =>
+        <Cell key={cell.value} value={cell.value} index={index} handleClick={() => tick(index)}
               isFilled={cell.status == Statuses.FILLED}/>
     );
 

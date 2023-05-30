@@ -1,11 +1,11 @@
-import {BaseSyntheticEvent, CSSProperties, MouseEventHandler} from "react";
+import {BaseSyntheticEvent, CSSProperties} from "react";
+import {useRecoilValue, useResetRecoilState} from "recoil";
+import {isSolvedState, resetGameState} from "../recoil/State.ts";
 
-interface Props {
-    handler: MouseEventHandler;
-    isSolved: boolean
-}
+export default function ResetButton() {
 
-export default function ResetButton({handler, isSolved}: Props) {
+    const isSolved = useRecoilValue(isSolvedState);
+    const reset = useResetRecoilState(resetGameState);
 
     const label = isSolved ? 'The puzzle is solved! Press to start a new game.' : 'New game';
 
@@ -32,5 +32,5 @@ export default function ResetButton({handler, isSolved}: Props) {
     return <button onMouseOver={handleOver}
                    onMouseLeave={handleLeave}
                    style={style}
-                   onClick={handler}>{label}</button>
+                   onClick={reset}>{label}</button>
 }

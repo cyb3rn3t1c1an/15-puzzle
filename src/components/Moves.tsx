@@ -1,15 +1,17 @@
 import {CSSProperties} from "react";
+import {useRecoilValue} from "recoil";
 
-interface Props {
-    count: number;
-}
-export default function Moves({count}: Props) {
+import {movesCounterState} from "../recoil/State.ts";
 
-    const style:CSSProperties = {
+export default function Moves() {
+
+    const movesCount = useRecoilValue(movesCounterState);
+
+    const style: CSSProperties = {
         paddingTop: '0.1vw',
         paddingRight: '0.4vw',
         fontSize: '1.2vw'
     }
 
-    return <div style={style}>Moves: {count}</div>
+    return <div style={style}>Moves: {movesCount}</div>
 }

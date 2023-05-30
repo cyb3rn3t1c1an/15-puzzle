@@ -1,14 +1,9 @@
 import ResetButton from "./ResetButton.tsx";
 import Moves from "./Moves.tsx";
-import {CSSProperties, MouseEventHandler} from "react";
+import {CSSProperties} from "react";
 
-interface Props {
-    count: number;
-    newGameHandler: MouseEventHandler;
-    isSolved: boolean;
-}
+export default function Footer() {
 
-export default function Footer({count, newGameHandler, isSolved}: Props) {
 
     const style: CSSProperties = {
         display: 'flex',
@@ -16,7 +11,7 @@ export default function Footer({count, newGameHandler, isSolved}: Props) {
     }
 
     return (<div style={style}>
-        <ResetButton isSolved={isSolved} handler={newGameHandler}/>
-        <Moves count={count}/>
+        <ResetButton/>
+        <Moves/>
     </div>);
 }

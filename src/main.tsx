@@ -2,9 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import Game from "./components/Game.tsx";
+import {RecoilRoot} from "recoil";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Game />
-  </React.StrictMode>,
+    <React.StrictMode>
+        <RecoilRoot>
+            <Game/>
+        </RecoilRoot>
+    </React.StrictMode>,
 )

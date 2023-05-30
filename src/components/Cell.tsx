@@ -10,6 +10,7 @@ interface Props {
 
 export default function Cell({value, index, isFilled, handleClick}: Props) {
     const style: CSSProperties = {
+        userSelect: 'none',
         width: '6vw',
         height: '6vw',
         textAlign: 'center',
