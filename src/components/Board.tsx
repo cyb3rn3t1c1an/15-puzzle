@@ -2,8 +2,8 @@ import {CSSProperties} from "react";
 import Cell from "./Cell.tsx";
 import {Statuses} from "../domain/CellModel.ts";
 import {useRecoilState, useRecoilValue} from "recoil";
-
 import {gameState, isSolvedState} from "../recoil/State.ts";
+import GameModel from "../domain/GameModel.ts";
 
 export default function Board() {
 
@@ -20,9 +20,9 @@ export default function Board() {
     }
 
     function tick(index: number) {
-        const {board, moves} = game.attemptToMove(index);
-        if (game.movesCounter < moves) {
-            setGame(game.copy(board, moves));
+        const attempt = game.attemptToMove(index);
+        if (attempt) {
+            setGame(new GameModel(attempt.board, attempt.moves));
         }
     }
 

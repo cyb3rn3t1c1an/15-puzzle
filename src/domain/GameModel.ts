@@ -29,17 +29,13 @@ export default class GameModel {
         }
     }
 
-    copy(board: CellModel[], movesCounter: number) {
-        return new GameModel(board, movesCounter);
-    }
-
     isSolved() {
         return this.board.every((cell, index, array) =>
             index === 0 || array[index - 1].value <= cell.value
         );
     }
 
-    attemptToMove(index: number) {
+    attemptToMove(index: number): { board: CellModel[], moves: number } | undefined {
         const neighbors = this.findNeighbors(index);
         const emptyCell = neighbors.find(index => this.isEmptyCell(index));
 
@@ -47,7 +43,7 @@ export default class GameModel {
             return {board: this.move(this.board, index, emptyCell), moves: this.movesCounter + 1};
         }
 
-        return {board: this.board, moves: this.movesCounter};
+        return undefined;
     }
 
     private isEmptyCell(index: number) {
